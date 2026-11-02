@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: potion
+      POSTGRES_PASSWORD: potion
+      POSTGRES_DB: potion_paste
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U potion -d potion_paste"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://potion:potion@db:5432/potion_paste
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: local-dev-secret-change-me
+      FRONTEND_ORIGIN: http://localhost:5000
+      ALLOWED_ORIGINS: http://localhost:5000,http://127.0.0.1:5000
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    command: >
+      sh -c "cd /app/backend &&
+             flask --app app db upgrade &&
+             python run.py"
+
+volumes:
+  pgdata:

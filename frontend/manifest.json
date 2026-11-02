@@ -1,0 +1,24 @@
+{
+  "name": "Potion Paste",
+  "short_name": "PotionPaste",
+  "description": "Collaborative code snippet sharing with offline support",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#f7f7f8",
+  "theme_color": "#6C5CE7",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f0f12" />
+  <title>Potion Paste</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <!-- Prism for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
+</head>
+<body class="app-body">
+  <div class="offline-banner" id="offlineBanner">You're offline — changes will sync when connection returns</div>
+
+  <!-- Auth screen -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card" id="loginCard">
+      <h1>Welcome back</h1>
+      <p class="subtitle">Sign in to your Potion Paste workspace</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email or username</label>
+          <input type="text" id="loginEmail" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required autocomplete="current-password" />
+        </div>
+        <div class="form-error hidden" id="loginError"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px">Sign in</button>
+      </form>
+      <p class="auth-switch">Don't have an account? <a href="#" id="showRegister">Create one</a></p>
+    </div>
+    <div class="auth-card hidden" id="registerCard">
+      <h1>Create account</h1>
+      <p class="subtitle">Start organising your code snippets</p>
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="regUsername">Username</label>
+          <input type="text" id="regUsername" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+" />
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" required minlength="10" />
+          <p class="form-hint">At least 10 characters, with upper, lower and a digit</p>
+        </div>
+        <div class="form-error hidden" id="regError"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px">Create account</button>
+      </form>
+      <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+    </div>
+  </div>
+
+  <!-- App shell -->
+  <div id="appShell" class="hidden">
+    <header class="app-header">
+      <a href="/app" class="logo">
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#6C5CE7"/><path d="M10 16.5L14 20.5L22 11.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Potion Paste</span>
+      </a>
+      <div class="search">
+        <input type="search" id="searchInput" placeholder="Search snippets…" />
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary btn-sm" id="newSnippetBtn">+ New snippet</button>
+        <button class="btn-icon" id="toggleComments" title="Comments">💬</button>
+        <div class="user-menu" id="userMenu">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span id="userName" style="font-size:13px;font-weight:500"></span>
+        </div>
+        <button class="btn btn-outline btn-sm" id="logoutBtn" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <div class="app-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h2>Snippets</h2>
+          <button class="btn-icon" id="refreshList" title="Refresh">↻</button>
+        </div>
+        <div class="snippet-list" id="snippetList">
+          <div class="empty-state" style="padding:32px 16px">
+            <div class="loading-spinner"></div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel" id="mainPanel">
+        <div class="empty-state" id="emptyEditor">
+          <div class="icon">📝</div>
+          <h3>No snippet selected</h3>
+          <p>Select a snippet from the sidebar or create a new one to get started.</p>
+          <button class="btn btn-primary" id="emptyNewBtn">Create snippet</button>
+        </div>
+
+        <div id="editorView" class="hidden" style="display:flex;flex-direction:column;flex:1;min-height:0">
+          <div class="editor-toolbar">
+            <input type="text" id="snippetTitle" placeholder="Untitled snippet" />
+            <select class="lang-select" id="languageSelect">
+              <option value="plaintext">Plain text</option>
+              <option value="python">Python</option>
+              <option value="javascript">JavaScript</option>
+              <option value="typescript">TypeScript</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="json">JSON</option>
+              <option value="sql">SQL</option>
+              <option value="go">Go</option>
+              <option value="rust">Rust</option>
+              <option value="java">Java</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+              <option value="shell">Shell</option>
+              <option value="yaml">YAML</option>
+              <option value="markdown">Markdown</option>
+              <option value="dockerfile">Dockerfile</option>
+            </select>
+            <button class="visibility-toggle private" id="visibilityToggle" title="Toggle visibility">
+              <span class="dot"></span>
+              <span id="visibilityLabel">Private</span>
+            </button>
+            <button class="btn btn-sm btn-outline" id="shareBtn">Share</button>
+            <button class="btn btn-sm btn-outline" id="copyBtn">Copy</button>
+            <button class="btn btn-sm btn-primary" id="saveBtn">Save</button>
+            <button class="btn-icon" id="deleteBtn" title="Delete" style="color:var(--danger)">🗑</button>
+          </div>
+          <div class="editor-area">
+            <div class="code-wrapper">
+              <div class="line-numbers" id="lineNumbers"></div>
+              <textarea class="code-input" id="codeInput" spellcheck="false" placeholder="// Start typing or paste your code…"></textarea>
+            </div>
+          </div>
+          <div style="padding:8px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);display:flex;gap:16px;background:var(--bg-elevated)">
+            <span id="statusText">Ready</span>
+            <span id="versionText"></span>
+            <span id="updatedText"></span>
+          </div>
+        </div>
+      </main>
+
+      <aside class="comments-panel" id="commentsPanel">
+        <div class="comments-header">Comments</div>
+        <div class="comments-list" id="commentsList">
+          <p style="font-size:13px;color:var(--text-muted);text-align:center;padding:24px">Select a snippet to view comments</p>
+        </div>
+        <div class="comment-form hidden" id="commentForm">
+          <textarea id="commentBody" placeholder="Add a comment…"></textarea>
+          <div class="actions">
+            <button class="btn btn-sm btn-primary" id="postCommentBtn">Post</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Share modal -->
+  <div class="modal-backdrop" id="shareModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Share snippet</h2>
+        <button class="modal-close" data-close>×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">Anyone with the link can view this snippet.</p>
+        <div class="form-group">
+          <label>Share link</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="shareLinkInput" readonly />
+            <button class="btn btn-sm btn-primary" id="copyShareLink">Copy</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="shareCanComment" checked /> Allow comments
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close>Close</button>
+        <button class="btn btn-primary" id="generateShareBtn">Generate link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toasts"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/js/offline.js"></script>
+  <script src="/js/editor.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

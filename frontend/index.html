@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Potion Paste — Collaborative code snippet sharing with offline support, syntax highlighting, and real-time comments." />
+  <meta name="theme-color" content="#0f0f12" />
+  <title>Potion Paste — The developer workspace for code snippets</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body class="landing">
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#6C5CE7"/>
+          <path d="M10 16.5L14 20.5L22 11.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Potion Paste</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="/docs">Docs</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="/app" class="btn btn-ghost">Log in</a>
+        <a href="/app" class="btn btn-primary">Try free →</a>
+      </div>
+      <button class="nav-toggle" aria-label="Menu" id="navToggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      FROM THE BUILDERS OF DEVELOPER TOOLS
+    </div>
+    <h1 class="hero-title">
+      The developer<br />
+      <span class="gradient-text">snippet workspace</span>
+    </h1>
+    <p class="hero-sub">
+      Potion Paste moves your code snippets to the cloud and centralises their creation,
+      organisation and sharing. Keep developers in flow with private links, real-time comments,
+      offline editing and a superior developer experience.
+    </p>
+    <div class="hero-cta">
+      <a href="/app" class="btn btn-primary btn-lg">Get started →</a>
+      <a href="#features" class="btn btn-outline btn-lg">See features</a>
+    </div>
+
+    <!-- Product mockup inspired by Coder -->
+    <div class="hero-mockup">
+      <div class="mockup-window">
+        <div class="mockup-titlebar">
+          <div class="mockup-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="mockup-tabs">
+            <span class="tab active">Workspaces</span>
+            <span class="tab">Snippets</span>
+            <span class="tab">Shared</span>
+          </div>
+          <div class="mockup-user">
+            <span class="avatar">AP</span>
+          </div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-sidebar">
+            <div class="sidebar-item active">
+              <span class="status-dot online"></span>
+              <div>
+                <strong>utils.py</strong>
+                <small>Python · Private</small>
+              </div>
+            </div>
+            <div class="sidebar-item">
+              <span class="status-dot"></span>
+              <div>
+                <strong>api-client.ts</strong>
+                <small>TypeScript · Shared</small>
+              </div>
+            </div>
+            <div class="sidebar-item">
+              <span class="status-dot"></span>
+              <div>
+                <strong>Dockerfile</strong>
+                <small>Docker · Private</small>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-editor">
+            <div class="editor-header">
+              <span class="lang-pill">Python</span>
+              <span class="editor-actions">
+                <button class="icon-btn" title="Copy">⧉</button>
+                <button class="icon-btn" title="Share">↗</button>
+              </span>
+            </div>
+            <pre class="code-preview"><code><span class="kw">from</span> typing <span class="kw">import</span> Optional
+<span class="kw">import</span> hashlib
+
+<span class="kw">def</span> <span class="fn">secure_hash</span>(data: str, salt: Optional[str] = <span class="kw">None</span>) -> str:
+    <span class="cm">"""Generate a deterministic secure hash."""</span>
+    payload = f<span class="st">"{salt or ''}{data}"</span>.encode()
+    <span class="kw">return</span> hashlib.sha256(payload).hexdigest()</code></pre>
+            <div class="build-log">
+              <div class="log-item success">✓ Authorising</div>
+              <div class="log-item success">✓ Loading environment</div>
+              <div class="log-item success">✓ Syntax check passed</div>
+              <div class="log-item">○ Syncing offline queue…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Decorative elements -->
+      <div class="deco cloud-left"></div>
+      <div class="deco cloud-right"></div>
+      <div class="deco hand"></div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <h2>Everything you need for snippet workflows</h2>
+      <p>Designed for individuals and teams who live in code.</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Private by default</h3>
+        <p>Snippets start private. Share only what you choose with non-guessable links and optional expiry.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3>Syntax highlighting</h3>
+        <p>Beautiful highlighting for 30+ languages with line numbers, language detection and one-click copy.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Real-time comments</h3>
+        <p>Discuss code in context. Comments and updates appear instantly for everyone connected.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Offline-first PWA</h3>
+        <p>Install Potion Paste. Create and edit offline. Changes sync safely when you’re back online.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">🏷</div>
+        <h3>Tags & collections</h3>
+        <p>Organise with tags and search. Keep your personal library tidy and discoverable.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">🕒</div>
+        <h3>Revision history</h3>
+        <p>Every change is versioned. Roll back or compare previous states of any snippet.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how" id="how">
+    <div class="section-header">
+      <h2>How Potion Paste works</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Create</h3>
+        <p>Write or paste code, pick a language, add a title and tags. Everything stays private until you share.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Share</h3>
+        <p>Generate a unique link. Control whether recipients can comment or only view.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Collaborate</h3>
+        <p>Receive live updates and comments without refreshing. Works even when you’re offline.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <h2>Start pasting smarter today</h2>
+    <p>Free for individual developers. No credit card required.</p>
+    <a href="/app" class="btn btn-primary btn-lg">Open Potion Paste →</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">Potion Paste</span>
+        <p>Collaborative code snippets, offline-ready.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">GitHub</a>
+        <a href="#">Status</a>
+      </div>
+    </div>
+    <p class="copyright">© 2026 Potion Paste. Built for developers.</p>
+  </footer>
+
+  <script>
+    // Simple mobile nav
+    document.getElementById('navToggle')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('open');
+    });
+    // Register service worker early
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

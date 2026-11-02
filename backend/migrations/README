@@ -1,0 +1,5 @@
+Generic single-database configuration for Flask-Migrate / Alembic.
+Run:
+  flask --app app db init   # once
+  flask --app app db migrate -m "message"
+  flask --app app db upgrade
